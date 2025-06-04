@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Gaussian Mapping for Evolving Scenes">
+  <meta name="keywords" content="3D Reconstruction, Gaussian-splatting, Gaussian">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GaME</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/game_icon.png">
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Gaussian Mapping for Evolving Scenes</h1>
+          <div class="is-size-5 publication-authors">
+
+
+            <span class="author-block">
+              <a href="https://vladimiryugay.github.io/">Vladimir Yugay<sup>1*</sup></a>,
+            </span>
+            
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=TNKymuMAAAAJ&hl=de">Kersten Thies<sup>1*</sup></a>,
+            </span>
+            
+            <span class="author-block">
+              <a href="https://lucacarlone.mit.edu/">Luca Carlone<sup>2</sup></a>,
+            </span>
+
+            <span class="author-block">
+              <a href="https://staff.fnwi.uva.nl/th.gevers/">Theo Gevers<sup>1</sup></a>,
+            </span>            
+            
+            <span class="author-block">
+              <a href="https://oswaldm.github.io/">Martin R. Oswald<sup>1</sup></a>,
+            </span>
+            
+            <span class="author-block">
+              <a href="https://schmluk.github.io/">Lucas Schmid<sup>2</sup></a>,
+            </span>            
+
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Amsterdam</span>,
+            <span class="author-block"><sup>2</sup>Massachusetts Institute of Technology</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!-- <span class="link-block">
+                <a href="https://ivi.fnwi.uva.nl/cv/paper/GaussianSLAM.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/VladimirYugay/GaME"
+                   class="external-link button is-normal is-rounded is-light">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="margin-top: 0; padding-top: 0.1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">TLDR</h2>
+        <div class="content has-text-justified">
+          <p>
+            Given a posed RGBD stream, GaME reconstructs a 3D scene represented with 3D Gaussians.
+            Our mapping system can adapt to the changes occurring in the scene that are not
+            directly observable. For example, you reconstructed your kitchen, continued to capture your bedroom,
+            and then returned to the kitchen. During your absence, someone moved the chair and added a table in 
+            the kitchen. Our method can handle such situations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section m-0 p-0">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Method Overview</h2>
+    
+        <div class="column pt-0">
+          <figure class="image is-full-width">
+            <img src="./static/images/architecture.png"/>
+          </figure>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <strong>GaME Architecture.Given a segmented RGB-D input stream, the keyframe management 
+              system selects keyframes and triggers the dynamic scene adaptation (DSA) module. 
+              DSA first integrates newly observed geometry, then removes outdated geometry 
+              using covisible keyframes from the 3D Gaussian Splatting map. 
+              The keyframe manager then masks stale regions, and the mapping system uses the 
+              processed keyframes for local covisibility window optimization.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- Animation. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Rendering Results</h2>
+
+        <!-- Re-rendering. -->
+        <h3 class="title is-4">Comparison on Flat dataset</h3>
+
+        <div class="content has-text-justified is-centered">
+        </div>           
+
+        <div class="content has-text-centered is-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="100%">
+            <source src="./static/videos/GaME_comparison.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+        <h3 class="title is-4">Comparison on Aria Dataset</h3>
+        <div class="content has-text-justified">
+          <p>
+            The Aria Dataset features fewer changes compared to the Flat Dataset. 
+            Notable differences include items on the table and a picture that was moved to 
+            the wall between runs. Another example is the tea table, which was also repositioned. 
+            In the second room, you can observe the picture that was moved from one shelf to another.
+          </p>
+        </div> 
+
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-fifth pt-0">
+            <p>SplatAM</p>            
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/aria_splatam_0_agent_3_frame_000200.png"/>
+            </figure>            
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>DG-SLAM</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/aria_dgslam_0_agent_3_frame200.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>MonoGS</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/aria_monogs_0_agent_3_frame00020.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>GaME (ours)</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/aria_render_0_agent_3_frame_000200.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>Ground-truth</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/aria_gt_0_agent_3_frame_000200.jpg"/>
+            </figure>
+          </div>
+        </div>      
+        
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-fifth pt-0">
+            <p>SplatAM</p>            
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/splatam_nvs_0014.png"/>
+            </figure>            
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>DG-SLAM</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/dgslam_nvs_0014.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>MonoGS</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/monogs_nvs_0014.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>GaME (ours)</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/000013_rendered.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>Ground-truth</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/gt_0013.png"/>
+            </figure>
+          </div>
+        </div>      
+
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-fifth pt-0">
+            <p>SplatAM</p>            
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/splatam_0037.png"/>
+            </figure>            
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>DG-SLAM</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/dgslam_nvs_0036.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>MonoGS</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/monogs_nvs_0037.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>GaME (ours)</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/000036_rendered.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>Ground-truth</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/gt_0036.png"/>
+            </figure>
+          </div>
+        </div>      
+
+
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-fifth pt-0">
+            <p>SplatAM</p>            
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/splatam_nvs_0006_room1.png"/>
+            </figure>            
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>DG-SLAM</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/dgslam_nvs_0006_room1.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>MonoGS</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/monogs_nvs_0006_room1.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>GaME (ours)</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/room1_000005_rendered.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>Ground-truth</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/gt_nvs_0005_room1.png"/>
+            </figure>
+          </div>
+        </div>   
+        
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-fifth pt-0">
+            <p>SplatAM</p>            
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/splatam_nvs_0021_room1.png"/>
+            </figure>            
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>DG-SLAM</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/dgslam_nvs_0021_room1.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>MonoGS</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/monogs_nvs_0021_room1.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>GaME (ours)</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/room1_000020_rendered.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>Ground-truth</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/gt_nvs_0020_room1.png"/>
+            </figure>
+          </div>
+        </div> 
+        
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-fifth pt-0">
+            <p>SplatAM</p>            
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/splatam_tvs_0373_room1.png"/>
+            </figure>            
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>DG-SLAM</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/dgslam_tvs_0373_room1.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>MonoGS</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/monogs_tvs_0373_room1.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>GaME (ours)</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/room1_train_000374_rendered.png"/>
+            </figure>
+          </div>
+          <div class="column is-one-fifth pt-0">
+            <p>Ground-truth</p>
+            <figure class="image is-3by3">
+              <img src="./static/images/comparisons/gt_tvs_0373_room1.png"/>
+            </figure>
+          </div>
+        </div>         
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{yugay2024magicslammultiagentgaussianglobally,
+      title={MAGiC-SLAM: Multi-Agent Gaussian Globally Consistent SLAM}, 
+      author={Vladimir Yugay and Theo Gevers and Martin R. Oswald},
+      year={2024},
+      eprint={2411.16785},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.16785}, 
+}</code></pre>
+  </div>
+</section> -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-4">
+        <div class="content">
+          <p>
+            The website is based on <a href="https://github.com/nerfies/nerfies.github.io">this source code</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
