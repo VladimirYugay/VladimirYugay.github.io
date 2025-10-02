@@ -156,15 +156,21 @@
       <div class="column is-full-width">
         <h2 class="title is-3">Camera Pose Estimation Results</h2>
 
-        <!-- ARKit. -->
+          
         <div class="content has-text-centered">
           <p>
-            Trajectories estimated from full test videos of <strong><em></em>ARKit Dataset.</em></strong>
+            Trajectories estimated from videos of the test splits of indoor
+            (<strong><em></em>ScanNet</em></strong>, <strong><em></em>ARKit</em></strong>), and
+            outdoor (<strong><em></em>KITTI</em></strong>) datasets.
+            <strong><em></em>TUM</em></strong> dataset was not used during training.
+            Trajectories are evalated over the <i>whole</i> video <i>without</i> alignment to the ground-truth.
           </p>
         </div> 
+
+        <!-- ARKit. -->
         <div class="columns is-multiline is-variable is-1">
           <div class="column is-one-third pt-0">
-            <p>41069050</p>
+            <p>ARKit 41069050</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/arkit_41069050.webm" type="video/webm">
@@ -173,7 +179,7 @@
             </figure>
           </div>
           <div class="column is-one-third pt-0">
-            <p>41159557</p>
+            <p>ARKit 41159557</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/arkit_41159557.webm" type="video/webm">
@@ -182,7 +188,7 @@
             </figure>
           </div>
           <div class="column is-one-third pt-0">
-            <p>41254382</p>
+            <p>ARKit 41254382</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/arkit_41254382.webm" type="video/webm">
@@ -194,14 +200,9 @@
           
         <!-- ScanNet. -->
         </div>         
-        <div class="content has-text-centered">
-          <p>
-            Trajectories estimated from full test videos of <strong><em></em>ScanNet Dataset.</em></strong>
-          </p>
-        </div> 
         <div class="columns is-multiline is-variable is-1">
           <div class="column is-one-third pt-0">
-            <p>0732</p>
+            <p>ScanNet 0732</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/scannet_0732.webm" type="video/webm">
@@ -210,7 +211,7 @@
             </figure>
           </div> 
           <div class="column is-one-third pt-0">
-            <p>0762</p>
+            <p>ScanNet 0762</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/scannet_0762.webm" type="video/webm">
@@ -219,7 +220,7 @@
             </figure>
           </div> 
           <div class="column is-one-third pt-0">
-            <p>0794</p>
+            <p>ScanNet 0794</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/scannet_0794.webm" type="video/webm">
@@ -230,15 +231,15 @@
           
           <!-- KITTI. -->
         </div>         
-        <div class="content has-text-centered">
+        <!-- <div class="content has-text-centered">
           <p>
             Trajectories estimated from test videos of <strong><em></em>KITTI</em></strong> Dataset.
             Trajectories are evalated over the whole video without alignment.
           </p>
-        </div> 
+        </div>  -->
         <div class="columns is-multiline is-variable is-1">
           <div class="column is-one-third pt-0">
-            <p>03</p>
+            <p>KITTI 03</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/kitti_03.webm" type="video/webm">
@@ -247,7 +248,7 @@
             </figure>
           </div>
           <div class="column is-one-third pt-0">
-            <p>04</p>
+            <p>KITTI 04</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/kitti_04.webm" type="video/webm">
@@ -256,7 +257,7 @@
             </figure>
           </div>
           <div class="column is-one-third pt-0">
-            <p>07</p>
+            <p>KITTI 07</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/kitti_07.webm" type="video/webm">
@@ -267,15 +268,15 @@
           
           <!-- TUM-RGBD. -->
         </div>         
-        <div class="content has-text-centered">
+        <!-- <div class="content has-text-centered">
           <p>
             Trajectories estimated from test videos of <strong><em></em>TUM</em></strong> Dataset.
             Trajectories are evalated over the whole video without alignment.
           </p>
-        </div> 
+        </div>  -->
         <div class="columns is-multiline is-variable is-1">
           <div class="column is-one-third pt-0">
-            <p>xyz</p>
+            <p>TUM xyz</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/tum_xyz.webm" type="video/webm">
@@ -284,7 +285,7 @@
             </figure>
           </div>
           <div class="column is-one-third pt-0">
-            <p>desk2</p>
+            <p>TUM desk2</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/tum_desk2.webm" type="video/webm">
@@ -293,7 +294,7 @@
             </figure>
           </div>   
           <div class="column is-one-third pt-0">
-            <p>long office</p>
+            <p>TUM long office</p>
             <figure class="image is-16by9">
               <video class="has-ratio" controls autoplay loop muted>
                 <source src="./static/videos/tum_long_office.webm" type="video/webm">
