@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Visual Odometry with Transformers">
+  <meta name="keywords" content="Visual Odometry, Odometry">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VoT</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/vot_icon.png">
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Visual Odometry with Transformers</h1>
+          <div class="is-size-5 publication-authors">
+
+
+            <span class="author-block">
+              <a href="https://vladimiryugay.github.io/">Vladimir Yugay<sup>*</sup></a>,
+            </span>
+            
+            <span class="author-block">
+              <a href="https://scholar.google.nl/citations?user=welhhBIAAAAJ&hl=nl">Duy-Kien Nguyen<sup>*</sup></a>,
+            </span>
+
+            <span class="author-block">
+              <a href="https://staff.fnwi.uva.nl/th.gevers/">Theo Gevers</a>,
+            </span>
+            
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/cgmsnoek/?originalSubdomain=nl">Cees Snoek</a>,
+            </span>            
+            
+            <span class="author-block">
+              <a href="https://oswaldm.github.io/">Martin R. Oswald</a>,
+            </span>
+
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">University of Amsterdam</span>,
+          </div>
+
+          <div class="is-size-6 has-text-grey">
+            <span class="author-block"><sup>*</sup>Equal contribution</span>
+          </div>          
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2506.06909"
+                   class="external-link button is-normal is-rounded is-dark"
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="https://github.com/VladimirYugay/VoT"
+                   class="external-link button is-normal is-rounded is-light"
+                   target="_blank" rel="noopener noreferrer">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>              
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="margin-top: 0; padding-top: 0.1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">TLDR</h2>
+        <div class="content has-text-centered">
+          <p>
+            Given a video, <i>VoT</i> estimates the metric camera trajectory from it. The method relies solely on images
+            as input and does not need post-optimization.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section m-0 p-0">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Method Overview</h2>
+    
+        <div class="column pt-0">
+          <figure class="image is-full-width">
+            <img src="./static/images/architecture.png"/>
+          </figure>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <strong>VoT Architecture</strong>. Given multiple input frames, a frozen image encoder extracts 
+            per-image token embeddings. Camera embeddings are then concatenated to aggregate the information
+            for camera pose estimation. The embeddings are decoded by <i>L</i> repeating decoder blocks with
+            temporal and spatial attention modules. The rotations are projected onto the SO(3) manifold
+            to ensure valid relative rotations.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Camera Pose Estimation Results</h2>
+
+        <!-- ARKit. -->
+        <div class="content has-text-centered">
+          <p>
+            Trajectories estimated from full test videos of <strong><em></em>ARKit Dataset.</em></strong>
+          </p>
+        </div> 
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-third pt-0">
+            <p>41069050</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/arkit_41069050.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div>
+          <div class="column is-one-third pt-0">
+            <p>41159557</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/arkit_41159557.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div>
+          <div class="column is-one-third pt-0">
+            <p>41254382</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/arkit_41254382.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div> 
+          
+          
+        <!-- ScanNet. -->
+        </div>         
+        <div class="content has-text-centered">
+          <p>
+            Trajectories estimated from full test videos of <strong><em></em>ScanNet Dataset.</em></strong>
+          </p>
+        </div> 
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-third pt-0">
+            <p>0732</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/scannet_0732.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div> 
+          <div class="column is-one-third pt-0">
+            <p>0762</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/scannet_0762.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div> 
+          <div class="column is-one-third pt-0">
+            <p>0794</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/scannet_0794.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div> 
+          
+          <!-- KITTI. -->
+        </div>         
+        <div class="content has-text-centered">
+          <p>
+            Trajectories estimated from test videos of <strong><em></em>KITTI</em></strong> Dataset.
+            Trajectories are evalated over the whole video without alignment.
+          </p>
+        </div> 
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-third pt-0">
+            <p>03</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/kitti_03.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div>
+          <div class="column is-one-third pt-0">
+            <p>04</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/kitti_04.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div>
+          <div class="column is-one-third pt-0">
+            <p>07</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/kitti_07.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div> 
+          
+          <!-- TUM-RGBD. -->
+        </div>         
+        <div class="content has-text-centered">
+          <p>
+            Trajectories estimated from test videos of <strong><em></em>TUM</em></strong> Dataset.
+            Trajectories are evalated over the whole video without alignment.
+          </p>
+        </div> 
+        <div class="columns is-multiline is-variable is-1">
+          <div class="column is-one-third pt-0">
+            <p>xyz</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/tum_xyz.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div>
+          <div class="column is-one-third pt-0">
+            <p>desk2</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/tum_desk2.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div>   
+          <div class="column is-one-third pt-0">
+            <p>long office</p>
+            <figure class="image is-16by9">
+              <video class="has-ratio" controls autoplay loop muted>
+                <source src="./static/videos/tum_long_office.webm" type="video/webm">
+                Your browser does not support the video tag.
+              </video>
+            </figure>
+          </div> 
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{yugay2025gaussianmappingevolvingscenes,
+      title={Gaussian Mapping for Evolving Scenes}, 
+      author={Vladimir Yugay and Thies Kersten and Luca Carlone and Theo Gevers and Martin R. Oswald and Lukas Schmid},
+      year={2025},
+      eprint={2506.06909},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2506.06909}, 
+}</code></pre>
+  </div>
+</section> -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-4">
+        <div class="content">
+          <p>
+            The website is based on <a href="https://github.com/nerfies/nerfies.github.io">this source code</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
