@@ -130,16 +130,43 @@
     
         <div class="column pt-0">
           <figure class="image is-full-width">
+            <img src="./static/images/teaser.png"/>
+          </figure>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            <strong>Fast Visual Odometry Pipeline</strong>. The metric camera trajectory is derived by passing overlapping
+            image windows through a transformer that estimates relative camera poses and their confidence scores.
+            Subsequently, the inference module integrates these pose and confidence estimates into a unified trajectory.
+            FVO is almost 2 times faster than the fastest baseline on commodity hardware.
+            Moreover, our method does not rely on camera parameters or test-time optimization. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<br>
+<br>
+
+<section class="section m-0 p-0">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-3">Visual Odometry Transformer</h2>
+    
+        <div class="column pt-0">
+          <figure class="image is-full-width">
             <img src="./static/images/architecture.png"/>
           </figure>
         </div>
         <div class="content has-text-justified">
           <p>
-            <strong>VoT Architecture</strong>. Given multiple input frames, a frozen image encoder extracts 
+            <strong>Visual ddometry transformer architecture.</strong>. Given multiple input frames, a frozen image encoder extracts
             per-image token embeddings. Camera embeddings are then concatenated to aggregate the information
-            for camera pose estimation. The embeddings are decoded by <i>L</i> repeating decoder blocks with
-            temporal and spatial attention modules. The rotations are projected onto the SO(3) manifold
-            to ensure valid relative rotations.
+            for camera pose estimation. The embeddings are decoded by <it>L</it> repeating decoder blocks with temporal
+            and spatial attention modules. The rotations are projected onto the <it><b>SO(3)</b></it> manifold to
+            ensure valid relative rotations.
           </p>
         </div>
       </div>
@@ -311,10 +338,10 @@
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
-    <pre><code>@misc{yugay2025visualodometrytransformers,
-      title={Visual Odometry with Transformers}, 
+    <pre><code>@misc{yugay2026fvofastvisualodometry,
+      title={FVO: Fast Visual Odometry with Transformers}, 
       author={Vlardimir Yugay and Duy-Kien Nguyen and Theo Gevers and Cees G. M. Snoek and Martin R. Oswald},
-      year={2025},
+      year={2026},
       eprint={2510.03348},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
