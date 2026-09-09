@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CalfVO: Monocular Visual Odometry without Calibration or Test-time Optimization">
+    <meta name="keywords" content="Visual Odometry, Odometry">
+    <title>CalfVO</title>
+    <link rel="stylesheet" href="./static/css/bulma.min.css">
+    <link rel="icon" href="./static/images/calf_icon.png">
+    <style>
+        .teaser-image {
+            max-width: 420px;
+        }
+
+        .caption {
+            color: #4a4a4a;
+        }
+    </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-PYVRSFMDRL');
+    </script>
+</head>
+
+<body>
+    <section class="section">
+
+        <!-- Title, authors, links -->
+        <div class="container is-max-desktop has-text-centered mb-6">
+            <h1 class="title is-size-2">Monocular Visual Odometry without Calibration or Test-time Optimization</h1>
+            <p class="is-size-5">
+                <a href="https://vladimiryugay.github.io/">Vladimir Yugay</a><sup>*</sup>,
+                <a href="https://scholar.google.nl/citations?user=welhhBIAAAAJ&hl=nl">Duy-Kien Nguyen</a><sup>*</sup>,
+                <a href="https://staff.fnwi.uva.nl/th.gevers/">Theo Gevers</a>,
+                <a href="https://www.linkedin.com/in/cgmsnoek/?originalSubdomain=nl">Cees Snoek</a>,
+                <a href="https://oswaldm.github.io/">Martin R. Oswald</a>
+            </p>
+            <p class="is-size-5">University of Amsterdam</p>
+            <p class="is-size-6 has-text-grey mb-4"><sup>*</sup>Equal contribution</p>
+            <p class="is-size-5">
+                <a href="https://arxiv.org/abs/2510.03348">[arXiv]</a>
+                <a href="https://github.com/VladimirYugay/VoT">[Code]</a>
+            </p>
+        </div>
+
+        <!-- Teaser -->
+        <div class="container is-max-desktop has-text-centered mb-6">
+            <img class="teaser-image" src="./static/images/teaser3.png">
+            <p class="caption mt-4 has-text-justified">
+                <b>Visual odometry without calibration or alignment.</b> Given uncalibrated video, <i>CalfVO</i>
+                predicts a metric camera trajectory in a single forward pass at 53 FPS, with no camera intrinsics,
+                no bundle adjustment and no loop closure. The trajectory is placed in the scene at the scale the
+                network outputs, with no fitting to ground truth. The scene is rendered from ground-truth depth and
+                is not predicted by our method.
+            </p>
+        </div>
+
+        <!-- Abstract -->
+        <div class="container is-max-desktop mb-6">
+            <h1 class="title has-text-centered">Abstract</h1>
+            <p class="is-size-5 has-text-justified">
+                The most accurate monocular visual odometry systems require known camera intrinsics, refine their
+                estimates with test-time optimization, and recover trajectories only up to an unknown factor. Systems
+                built on large 3D models need no intrinsics, but they remain considerably less accurate and slower for
+                odometry. Direct pose regression avoids all these requirements, yet it has not matched either
+                approach's accuracy. We revisit this formulation with a transformer that predicts relative camera poses
+                together with separate rotation and translation confidences over overlapping image windows, supervised
+                by camera poses alone. A confidence-weighted module then aggregates the overlapping predictions into a
+                single trajectory. The resulting method, <i>CalfVO</i>, needs no intrinsics, no bundle adjustment, and
+                no loop closure, and it recovers scale from learned priors, accurately enough that it is evaluated
+                without any alignment to the ground truth. Across various benchmarks, it is the most accurate
+                calibration-free method on every metric we report, and it runs at 53 FPS, faster than every baseline.
+            </p>
+        </div>
+
+        <!-- Method -->
+        <div class="container is-max-desktop has-text-centered mb-6">
+            <h1 class="title">Odometry Transformer</h1>
+            <img src="./static/images/architecture.png" width="100%">
+            <p class="caption mt-4 has-text-justified">
+                Given multiple input frames, a frozen image encoder extracts per-image token embeddings. Camera
+                embeddings are then concatenated to aggregate the information for camera pose estimation. The
+                embeddings are decoded by <i>L</i> repeating decoder blocks with temporal and spatial attention
+                modules. The rotations are projected onto the SO(3) manifold to ensure valid relative rotations.
+            </p>
+        </div>
+
+        <!-- Results -->
+        <div class="container is-max-desktop has-text-centered mb-6">
+            <h1 class="title">Camera Pose Estimation</h1>
+            <p class="is-size-5 mb-5">
+                Trajectories estimated on held-out sequences of <b>TUM RGB-D</b>, which appears in training in no
+                form, the <b>ScanNet</b> test split, and the <b>SoulCity</b> environment of <b>TartanAir</b>, held out
+                in full. Trajectories are evaluated over the <i>whole</i> video <i>without</i> alignment to the
+                ground truth.
+            </p>
+
+            <div class="columns is-multiline is-centered is-size-6">
+                <div class="column is-half">
+                    <p>TUM xyz</p>
+                    <video src="./static/videos/calfvo_tum_xyz.mp4" width="100%" playsinline controls autoplay loop muted></video>
+                </div>
+                <div class="column is-half">
+                    <p>TUM desk</p>
+                    <video src="./static/videos/calfvo_tum_desk.mp4" width="100%" playsinline controls autoplay loop muted></video>
+                </div>
+
+                <div class="column is-half">
+                    <p>ScanNet 0737</p>
+                    <video src="./static/videos/calfvo_scannet_737.mp4" width="100%" playsinline controls autoplay loop muted></video>
+                </div>
+                <div class="column is-half">
+                    <p>ScanNet 0742</p>
+                    <video src="./static/videos/calfvo_scannet_742.mp4" width="100%" playsinline controls autoplay loop muted></video>
+                </div>
+
+                <div class="column is-half">
+                    <p>ScanNet 0750</p>
+                    <video src="./static/videos/calfvo_scannet_750.mp4" width="100%" playsinline controls autoplay loop muted></video>
+                </div>
+                <div class="column is-half">
+                    <p>TartanAir SoulCity Hard P002</p>
+                    <video src="./static/videos/calfvo_soulcity_hard_p002.mp4" width="100%" playsinline controls autoplay loop muted></video>
+                </div>
+            </div>
+        </div>
+
+        <!-- BibTeX -->
+        <div class="container is-max-desktop mb-6">
+            <h1 class="title has-text-centered">BibTeX</h1>
+            <pre><code>@misc{yugay2026calfvo,
+      title={Monocular Visual Odometry without Calibration or Test-time Optimization},
+      author={Vladimir Yugay and Duy-Kien Nguyen and Theo Gevers and Cees G. M. Snoek and Martin R. Oswald},
+      year={2026},
+      eprint={2510.03348},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2510.03348},
+}</code></pre>
+        </div>
+
+    </section>
+</body>
+
+</html>
